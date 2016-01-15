@@ -5,4 +5,4 @@ Currently only PHP. Watch out for more soon: Javascript (Angular, Ember, Backbon
 
 Get a free RestDB account here: https://restdb.io
 
-![RestDB Logo](/images/restdbio.png | =450x)
+![RestDB Logo](/images/restdbio.png)
