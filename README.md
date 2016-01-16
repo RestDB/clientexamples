@@ -1,8 +1,9 @@
 # RestDB.io client examples
 Boiler plate code snippets for calling restdb.io REST APIs for popular programming languages.
 
-Currently only PHP. Watch out for more soon: Javascript (Angular, Ember, Backbone, JQuery). 
+- PHP client code
+- Javascript, jQuery minimal html5 page
 
-Get a free RestDB account here: https://restdb.io
+Watch out for more soon: Javascript (Angular, Ember, Backbone, JQuery). 
 
 ![RestDB Logo](/images/restdbio.png)
