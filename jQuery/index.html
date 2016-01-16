@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="description" content="Minimal HTML5 Document Showing How to Get Latest JQuery from CDN">
+	<title>RestDB jQuery example</title>
+	<script src="http://code.jquery.com/jquery-latest.js"></script>
+</head>
+<body>
+	<h1>RestDB jQuery boiler plate code</h1>
+	<div id="content">
+	</div>
+	<script>
+		$(document).ready(function() {
+			/*
+				Inject the API key for every call to the database.
+			*/
+			$.ajaxPrefilter(function( options ) {
+				if ( !options.beforeSend) {
+					options.beforeSend = function (xhr) { 
+						xhr.setRequestHeader('x-apikey', '569a2b87566759cf4b984a50');
+					}
+				}
+			});
+			/*
+				Create html from one record
+			*/
+			var makeHtmlItem = function(item) {
+				var element = $('<div></div>').attr('id', item._id);
+				element.append('<hr><span>'+item['first-name']+' '+item['last-name']+'</span>');
+				if (item['comment']){
+					element.append('<br><q>'+item['comment']+'</q>');
+				}
+				if (item.photo && item.photo.length > 0) {
+					element.append('<br><img src=\"https://rdb-simpledb.restdb.io/media/'+item['photo'][0]+'?s=t\">');
+				}
+				element.append($('<br><input type="text">'));
+				element.append($('<input type="button" value="send">').attr('id', item._id).on('click', itemClicked));
+				return element;	
+			}
+
+			/*
+				PUT a comment to a record and replace html element with updated record
+			*/
+			var itemClicked = function(evt){
+				console.log(this.id);
+				var comment = $(this).prev().val();
+				var jsondata = {"comment": comment};
+				$.ajax({
+					type: "PUT",
+					url: 'https://rdb-simpledb.restdb.io/rest/contact/'+this.id,
+					contentType: "application/json",
+					data: JSON.stringify(jsondata)
+				}).done(function(result) {
+					// replace div with a fresh record
+				  	$("#"+result._id).empty().append(makeHtmlItem(result));
+				});
+			}
+
+			/*
+				GET 5 records from contact Collection.
+				Sort by _id in reverse order, i.e. newest first
+			*/
+			$.getJSON('https://rdb-simpledb.restdb.io/rest/contact?max=5&sort=_id&dir=-1', function(data){
+				$.each(data, function(key, item){
+					console.log(item);
+					$('#content').append(makeHtmlItem(item));
+				});
+			});
+		});
+	</script>
+ 
+	</body>
+</html>
