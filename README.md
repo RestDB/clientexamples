@@ -6,4 +6,6 @@ Boiler plate code snippets for calling restdb.io REST APIs for popular programmi
 
 Watch out for more soon:  (Python, C#, Java, Angular, Ember, Backbone, JQuery). 
 
+Go to website https://restdb.io
+
 ![RestDB Logo](/images/restdbio.png)
