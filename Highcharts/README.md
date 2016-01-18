@@ -1,6 +1,6 @@
 # Highcharts report
 
-Minimal html page with a Highchart view of a Project database.
+Minimal html page with a Highcharts Basic bar chart of a Project database.
 
 You can run the example by opening the file directly from a local file in your browser.
 
