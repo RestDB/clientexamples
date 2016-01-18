@@ -1,6 +1,6 @@
-# Hightcharts charts with RestDB time management application
+# Highcharts report
 
-Minimal html page with a simple chart displaying Project / Hours.
+Minimal html page with a Highchart view of a Project database.
 
 You can run the example by opening the file directly from a local file in your browser.
 
