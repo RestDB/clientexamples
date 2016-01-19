@@ -1,8 +1,10 @@
 # RestDB.io client examples
-Boiler plate code snippets for calling restdb.io REST APIs for popular programming languages and frameworks.
+Boilerplate code snippets for calling restdb.io REST APIs for popular programming languages and frameworks.
 
 - PHP client code
-- Javascript, jQuery minimal html5 page
+- Python client code
+- Javascript, jQuery minimal HTML page
+- Highcharts bar chart HTML page
 
 Watch out for more soon:  (Python, C#, Java, Angular, Ember, Backbone). 
 
