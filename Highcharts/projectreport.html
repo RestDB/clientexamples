@@ -41,7 +41,7 @@ var html = template( templateData );
 $( '#myview' ).html(
   html
 );
-var apikey = "55dc2ecdd44cfe26700a4b1e";
+
 var hoursquery = {"hours": {"$gt": 0}};
 var hoursurl = 'https://rdb-proexample.restdb.io/rest/hours?q='+JSON.stringify(hoursquery)+'&metafields=true';
 var projectsurl = 'https://rdb-proexample.restdb.io/rest/projects';
