@@ -2,105 +2,138 @@
     <head>
         <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet" integrity="sha256-7s5uDGW3AHqw6xtJmNNtr+OBRJUlgkNJEo78P4b0yRw= sha512-nNo+yCHEyn0smMxSswnf/OnX6/KwJuZTlNZBjauKhTK0c+zT+q5JOCx0UFhXQ6rJR9jg6Es8gPuD2uZcYDLqSw==" crossorigin="anonymous">
         <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.0.0-alpha1/jquery.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/3.10.1/lodash.min.js" type="text/javascript"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.1.0/lodash.min.js" type="text/javascript"></script>
         <script src="https://code.highcharts.com/highcharts.js"></script>
         <script src="https://code.highcharts.com/modules/exporting.js"></script>
     </head>
-    <body>
-        <h3>Project Report in Highcharts</h3>
+<body>
+<h3>Project Report in Highcharts</h3>
 
-        <div id="container" style="min-width: 310px; max-width: 800px; height: 400px; margin: 0 auto"></div>
-     
-        <script type="text/javascript">
-            $.ajaxSetup({
-                beforeSend: function (xhr)
-                {
-                   xhr.setRequestHeader("x-apikey","569cce8b566759cf4b984a60");        
-                }
-            });
-            var query = {"hourlist.Sum.hours": {"$gt": 0}};
-            var url = '/rest/projects?sort=hourlist.Sum.hours&dir=-1&q='+JSON.stringify(query);
-            //console.log("get data "+url);
-            $.getJSON(url, function(datalist){
-            
-                var cat = _.toArray(_.map(datalist, function(item){
-                    if (item.customer && item.customer[0]) {
-                        return item.title + ' ('+item.customer[0].name+')';      
-                    } else {
-                        return item.title + ' (no customer)';      
-                    }
-                   
-                }));
-                
-                var dataSeries = [{
-                    name: 'Billable',
-                    data: _.map(datalist, function(item){ 
-                        //console.log("billable item ", item);
-                        if (item.hourlist && item.hourlist.Sum){
-                            return item.hourlist.Sum.hours;
-                        } else {
-                            return 0;
-                        }
-                    })
-                }];
-                //console.log("Data: ", datalist)
-                //console.log("Series: ", dataSeries)
-                
-                
-                $('#container').highcharts({
-                    chart: {
-                        type: 'bar'
-                    },
-                    title: {
-                        text: 'Hours per project'
-                    },
-                    subtitle: {
-                        text: 'Source: <a href="https://restdb.io">restdb.io</a>'
-                    },
-                    xAxis: {
-                        categories: cat,
-                        title: {
-                            text: 'Projects'
-                        }
-                    },
-                    yAxis: {
-                        min: 0,
-                        title: {
-                            text: 'Hours',
-                            align: 'high'
-                        },
-                        labels: {
-                            overflow: 'justify'
-                        }
-                    },
-                    tooltip: {
-                        valueSuffix: ' 60 minutes'
-                    },
-                    plotOptions: {
-                        bar: {
-                            dataLabels: {
-                                enabled: true
-                            }
-                        }
-                    },
-                    legend: {
-                        layout: 'vertical',
-                        align: 'right',
-                        verticalAlign: 'top',
-                        x: -40,
-                        y: 80,
-                        floating: true,
-                        borderWidth: 1,
-                        backgroundColor: ((Highcharts.theme && Highcharts.theme.legendBackgroundColor) || '#FFFFFF'),
-                        shadow: true
-                    },
-                    credits: {
-                        enabled: false
-                    },
-                    series: dataSeries
+<div id="container" style="min-width: 310px; max-width: 800px; height: 400px; margin: 0 auto"></div>
+<div class="center-block">
+<a class="btn btn-link" href="/public/Billing-report">Show billing hours report</a>    
+</div>
+
+<!-- BEGIN: Underscore Template Definition. -->
+<script type="text/template" class="template">
+ 
+</script>
+<!-- END: Underscore Template Definition. -->
+ 
+ 
+<script type="text/javascript">
+$.ajaxSetup({
+    beforeSend: function (xhr)
+    {
+       xhr.setRequestHeader("x-apikey","569cce8b566759cf4b984a60");        
+    }
+});
+// Grab the HTML out of our template tag and pre-compile it.
+var template = _.template(
+  $( "script.template" ).html()
+);
+
+// Define our render data (to be put into the "rc" variable).
+var templateData = {
+};
+
+// Render the underscore template and inject it after the H1
+// in our current DOM.
+var html = template( templateData );
+$( '#myview' ).html(
+  html
+);
+var apikey = "55dc2ecdd44cfe26700a4b1e";
+var hoursquery = {"hours": {"$gt": 0}};
+var hoursurl = 'https://rdb-proexample.restdb.io/rest/hours?q='+JSON.stringify(hoursquery)+'&metafields=true';
+var projectsurl = 'https://rdb-proexample.restdb.io/rest/projects';
+
+$.getJSON(hoursurl, function(hoursdatalist){
+    console.log("Hours ",hoursdatalist)
+    $.getJSON(projectsurl, function(projectsdatalist){
+        console.log("Projects ",projectsdatalist)
+        
+        if (!Highcharts) {
+            console.error("No HS")
+            return;
+        }
+        var cat = _.toArray(_.map(projectsdatalist, function(item){
+            if (item.customer && item.customer[0]) {
+                return item.title + ' ('+item.customer[0].name+')';      
+            } else {
+                return item.title + ' (no customer)';      
+            }
+           
+        }));
+        var datalist = _.groupBy(hoursdatalist, "_parent_id");
+        var dataSeries = [{
+            name: 'Billable',
+            data: _.map(datalist, function(item){ 
+                console.log("billable item ", item);
+                return _.sumBy(item, function(onehour){
+                   return onehour.hours; 
                 });
-            });
+            })
+        }];
+        console.log("Data: ", datalist)
+        console.log("Series: ", dataSeries)
+        
+        
+        $('#container').highcharts({
+            chart: {
+                type: 'bar'
+            },
+            title: {
+                text: 'Time spent on clients'
+            },
+            subtitle: {
+                text: 'Source: <a href="https://restdb.io">restdb.io</a>'
+            },
+            xAxis: {
+                categories: cat,
+                title: {
+                    text: 'Projects'
+                }
+            },
+            yAxis: {
+                min: 0,
+                title: {
+                    text: 'Hours',
+                    align: 'high'
+                },
+                labels: {
+                    overflow: 'justify'
+                }
+            },
+            tooltip: {
+                valueSuffix: ' 60 minutes'
+            },
+            plotOptions: {
+                bar: {
+                    dataLabels: {
+                        enabled: true
+                    }
+                }
+            },
+            legend: {
+                layout: 'vertical',
+                align: 'right',
+                verticalAlign: 'top',
+                x: -40,
+                y: 80,
+                floating: true,
+                borderWidth: 1,
+                backgroundColor: ((Highcharts.theme && Highcharts.theme.legendBackgroundColor) || '#FFFFFF'),
+                shadow: true
+            },
+            credits: {
+                enabled: false
+            },
+            series: dataSeries
+        });
+    });
+});
 
-        </script>
-    </body>
+</script>
+</body>
 </html>
