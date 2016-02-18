@@ -5,8 +5,9 @@ Boilerplate code snippets for calling restdb.io REST APIs for popular programmin
 - Python client code
 - Javascript, jQuery minimal HTML page
 - Highcharts bar chart HTML page
+- Dashboard
 
-Watch out for more soon:  (Python, C#, Java, Angular, Ember, Backbone). 
+Watch out for more soon:  (C#, Java, Angular, Ember, Backbone). 
 
 Go to website https://restdb.io
 
