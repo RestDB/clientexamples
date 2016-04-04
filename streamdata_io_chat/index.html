@@ -1,0 +1,240 @@
+<html>
+    <head>
+        <meta content="yes" name="apple-mobile-web-app-capable">
+        <meta name="apple-touch-fullscreen" content="yes">
+        <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
+        <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+        <script src="https://code.jquery.com/jquery-2.2.2.min.js" integrity="sha256-36cp2Co+/62rEAAYHLmRCPIych47CvdM+uTBJwSzWjI=" crossorigin="anonymous"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+        <script src="https://cdn.rawgit.com/streamdataio/streamdataio-js-sdk/master/dist/streamdataio.min.js" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.6.1/lodash.min.js" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/fast-json-patch/0.5.6/json-patch.min.js" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/buzz/1.1.10/buzz.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.12.0/moment.min.js"></script>
+        <style>
+    
+            #chatpage{
+                margin-top: 5px; 
+            }
+            .chat
+            {
+                list-style: none;
+                margin: 0;
+                padding: 0;
+            }
+            
+            .chat li
+            {
+                margin-bottom: 10px;
+                padding-bottom: 5px;
+                border-bottom: 1px dotted #B3A9A9;
+            }
+            
+            .chat li.left .chat-body
+            {
+                margin-left: 60px;
+            }
+            
+            .chat li.right .chat-body
+            {
+                margin-right: 60px;
+            }
+            
+            
+            .chat li .chat-body p
+            {
+                margin: 0;
+                color: #777777;
+            }
+            
+            .panel .slidedown .glyphicon, .chat .glyphicon
+            {
+                margin-right: 5px;
+            }
+            
+            .panel-body
+            {
+                overflow-y: scroll;
+                height: 60%;
+            }
+            
+            ::-webkit-scrollbar-track
+            {
+                -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+                background-color: #F5F5F5;
+            }
+            
+            ::-webkit-scrollbar
+            {
+                width: 12px;
+                background-color: #F5F5F5;
+            }
+            
+            ::-webkit-scrollbar-thumb
+            {
+                -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3);
+                background-color: #555;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="chatpage" class="container">
+            <div class="row">
+                <div class="col-md-5">
+                    <div class="panel panel-primary">
+                        <div class="panel-heading">
+                            <span class="glyphicon glyphicon-comment"></span> Chat powered by restdb.io and streamdata.io
+                        </div>
+                        <div id="chatcontainer" class="panel-body">
+                            <ul id="notifications" class="chat">
+                            </ul>
+                        </div>
+                        <div class="panel-footer">
+                            <div class="input-group" style="margin-bottom:10px">
+                                <input id="nicknameinput" type="text" name="nickname" class="form-control input-sm" value="Anonymous">
+                            </div>
+                            <div class="input-group">
+                                <input id="messageinput" type="text" class="form-control input-sm" placeholder="Type your message here...">
+                                <span class="input-group-btn">
+                                    <button class="btn btn-warning btn-sm" id="sendbtn">
+                                        Send</button>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script>
+        
+        // message sound - uploaded to restdb.io media archive (works only on desktop)
+            var newMessageSound = new buzz.sound("/media/5700ed8fbe5d171100000033");
+        
+        // two small functions to help generating a color from a string
+            function hashCode(str) {
+                var hash = 0;
+                for (var i = 0; i < str.length; i++) {
+                   hash = str.charCodeAt(i) + ((hash << 5) - hash);
+                }
+                return hash;
+            }
+            function intToRGB(i){
+                var c = (i & 0x00FFFFFF)
+                    .toString(16)
+                    .toUpperCase();
+            
+                return "00000".substring(0, 6 - c.length) + c;
+            }
+
+            var items = [];
+            
+            // render the messages list 
+            var renderList = function(){
+                $("#notifications").empty();
+                _.each(items,function(item,index){
+                    var message = item.message || "";
+                    var nick = item.nick || "Anonymous";
+                    var iconnick = nick.substring(0,2);
+                    var itempos = index % 2 == 0?"left": "right";
+                    var namepos = index % 2 == 0?"": "pull-right";
+                    var timepos = index % 2 == 0?"pull-right": "";
+                    console.log(item._created);
+                    var timedesc = moment(item._created).fromNow();
+                    bg = intToRGB(hashCode(nick));
+                    var txtclr = "ffffff";
+                    // message template
+                    var markup = [  "<li class='",itempos," clearfix '>",
+                                        "<span class='chat-img pull-",itempos,"'>",
+                                           "<img class='img-circle' src='https://placeholdit.imgix.net/~text?txtsize=18&txt=",iconnick,"&w=50&h=50&txtclr=",txtclr,"&bg=",bg,"'>",
+                                        "</span>",
+                                        "<div class='chat-body clearfix'>",
+                                          "<div class='header'>",
+                                            "<strong class='primary-font ",namepos,"'>",nick,"</strong>",
+                                            "<small class='",timepos," text-muted'>",
+                                            "<span class='glyphicon glyphicon-time'></span>",timedesc,"</small>",
+                                          "</div>",
+                                          "<p>",
+                                          message,
+                                          "</p>",
+                                        "</div>",
+                                    "</li>"].join("");
+                    var $item = $(markup);
+                    $("#notifications").append($item);
+                    // scroll down to last message
+                    setTimeout(function(){
+                        var chatContainer = document.getElementById("chatcontainer");
+                        chatContainer.scrollTop = chatContainer.scrollHeight;
+                    },500);
+                });
+            };
+            // post a message
+            var postMessage = function(){
+                var message = $("#messageinput").val();
+                var nick = $("#nicknameinput").val();
+
+                $.post("https://streamdata-68e1.restdb.io/rest/notifications?apikey=56ffd61de48bc86417b67750",{"message":message||"empty","nick":nick||""},function(){
+                     $("#messageinput").val("");
+                }).fail(function(response){
+                    console.log("fail",response);
+                });
+            };
+            // delete a message (not in use here)
+            var deleteMessage = function(id){
+                $.ajax({
+                    url: 'https://streamdata-68e1.restdb.io/rest/notifications/'+id,
+                    type: 'DELETE',
+                    headers:{"x-apikey":"56ffd61de48bc86417b67750"},
+                    success: function(result) {
+                        console.log("deleted");
+                    }
+                });  
+            };
+            
+            $(function(){
+                
+                // bind jquery event to send message when user clicks send button
+                $("#sendbtn").on("click",function(){
+                    postMessage();
+                    return false;
+                });
+                // bind jquery event to send message on enter
+                $("#messageinput").on("keyup",function(e){
+                    if (e.which == 13) {
+                        postMessage();    
+                        return false;
+                    }else{
+                        return true;    
+                    }
+                });
+                
+                // delete message button event (not in use)
+                $(document).on("click",".delmsg",function(e){
+                   var id = $(this).data("id");
+                   deleteMessage(id);
+                   e.preventDefault();
+                   return false;
+                });
+
+                 // create the streamdata.io source - we user metafields to get the _created timestamp from restdb.io
+                var myEventSource = streamdataio.createEventSource("https://streamdata-68e1.restdb.io/rest/notifications?metafields=true&dir=1&sort=_id&apikey=56ffd61de48bc86417b67750", "YTZhNmFiNzItMTkwMi00NTdlLTkyMGItMWE5MDgxNDg0MTFl");
+                
+                // render initial list
+                myEventSource.onData(function(data){
+                    _.each(data,function(item){
+                        items.push(item); 
+                    });
+                    renderList();
+                }).onPatch(function(patches){
+                    // when a new message arrives, update the messagelist with the provided patch
+                    jsonpatch.apply( items, patches );
+                    renderList();
+                    newMessageSound.play();
+                });
+                // open the streamdata.io connection
+                myEventSource.open();
+                // refresh page every minute to update the times
+                setInterval(renderList,60000);
+            });
+        </script>
+    </body>
+</html>
