@@ -6,6 +6,7 @@ Boilerplate code snippets for calling restdb.io REST APIs for popular programmin
 - Javascript, jQuery minimal HTML page
 - Highcharts bar chart HTML page
 - Dashboard example charts with Chartist and JustGage
+- Streamdata.io and restdb.io live data chat example
 
 Watch out for more soon:  (C#, Java, Angular, Ember, Backbone). 
 
