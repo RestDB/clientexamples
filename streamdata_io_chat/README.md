@@ -14,6 +14,6 @@ Chat is only one example of live streaming data. The code for retrieving updated
 
 Have fun!
 
-![Chat screenshot](/images/chat-restdbio-streamdataio.png)
+<img src="/images/chat-restdbio-streamdataio.png" alt="chat screenshot" width="300">
 
 
