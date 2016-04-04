@@ -1,5 +1,7 @@
 # streamdata.io and restdb.io chat example
 
+Full story in this [blog-post](https://restdb.io/blog/#!posts/57026178d768113700004116). You might go there first.
+
 This example requires that you have a streamdata.io account set up (and of course a restdb.io account as well).
 
 To replicate this example for yourself, you should create a database with a simple collection named "Notifications" with two text fields: "message" and "nick".
