@@ -1,6 +1,6 @@
 # streamdata.io and restdb.io chat example
 
-Full story in this [blog-post](https://restdb.io/blog/#!posts/57026178d768113700004116). You might go there first.
+Full story in this [blog-post](https://restdb.io/blog/#!posts/57026178d768113700004116). You might go there first. Live demo can be found [here](https://streamdata-68e1.restdb.io/public/streamdatatest)
 
 This example requires that you have a streamdata.io account set up (and of course a restdb.io account as well).
 
