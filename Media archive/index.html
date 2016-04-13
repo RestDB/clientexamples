@@ -1,0 +1,138 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8"/>
+	<title>upload</title>
+	<script src="https://code.jquery.com/jquery-2.2.3.min.js"   integrity="sha256-a23g1Nt4dtEYOj7bR+vTu7+T8VP13humZFBJNIYoEJo="   crossorigin="anonymous"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.10.0/lodash.js"></script>
+	<style type="text/css">
+	img {
+		padding: 20px;
+		max-width: 400px;
+	}
+	table {
+		font-size: 12px;
+		 border-collapse: collapse;
+	}
+	td {
+		white-space: pre-wrap;
+		border: 1px solid gray;
+	}
+	</style>
+</head>
+<body>
+	<img src="https://rdb-simpledb.restdb.io/media/56658cc4bbba6079000001de" width="200px">
+	<p><input type="file" name="file1" id="file1">	
+	<p><button id="uploadButton" type="button" onclick="ff()">Upload</button>
+	<hr>
+	<div id="status">Status: initial</div>
+	
+	<h3>Images</h3>
+	<div id="images"></div>
+	
+	<script>
+	var apikey = "569a2b87566759cf4b984a50";
+	$.ajaxPrefilter(function( options ) {
+		if ( !options.beforeSend) {
+			options.beforeSend = function (xhr) { 
+				xhr.setRequestHeader('x-apikey', apikey);
+			}
+		}
+	});
+
+	var uploadAjaxSettings = {
+		xhr: function() {
+			var xhr = new window.XMLHttpRequest();
+
+			xhr.upload.addEventListener("progress", function(evt) {
+			  if (evt.lengthComputable) {
+				var percentComplete = evt.loaded / evt.total;
+				percentComplete = parseInt(percentComplete * 100);
+				console.log("Progress % ", percentComplete);
+				$("#status").text(percentComplete+"%");
+				if (percentComplete === 100) {
+					$("#status").text("Status: done");
+				}
+			  }
+			}, false);
+
+			return xhr;
+		  },
+		"async": true,
+		"url": "https://rdb-simpledb.restdb.io/media",
+		"method": "POST",
+		"contentType": false,
+		"cache": false,
+		"processData": false
+	}
+
+	var ff = function() {
+		var formData = new FormData();
+		var files = $('#file1')[0].files; //Should be 'picture.jpg'
+		var uploadButton = $('#uploadButton');
+		// Loop through each of the selected files.
+		for (var i = 0; i < files.length; i++) {
+			var file = files[i];
+			var name = files[0].name;
+			console.log("One file ", files[i]);
+			// Check the file type.
+			if (!file.type.match('image.*')) {
+				//continue;
+			}
+			// Add the file to the request.
+			formData.append('myfile', file, file.name);
+		}
+		
+		console.log("POST ", formData);
+		
+		uploadAjaxSettings.data = formData;
+		$.ajax(uploadAjaxSettings)
+		.done(function (response) {
+			// replaces form with a thank you message, replace with your own functionality
+			console.log("Done ", JSON.stringify(response, null, '  '));
+			_.each(response.ids, function(aid){
+				// Add media meta data from database
+				setTimeout(function(){
+					$.getJSON("https://rdb-simpledb.restdb.io/media/"+aid+"/meta", function(metadata){
+						console.log(JSON.stringify(metadata, null, '  '));
+						var table = $("<table></table>").append("<caption>"+metadata[0].origname+" ("+metadata[0].mediatype+")</caption>");
+						_.each(metadata[0].exif, function(val, key){
+							table.append($("<tr><td>"+key+"</td><td>"+val+"</td></tr>"));
+						})
+						$("#"+aid).append(table);
+					});	
+				}, 500);
+				
+				// Add a click event to image and call DELETE
+				// onerror="this.src='http://www.iconsdb.com/icons/preview/black/blank-file-xxl.png'"
+				var $img = $("<img>")
+					.attr("title", "Click to remove")
+					.attr("src", "https://rdb-simpledb.restdb.io/media/"+aid)
+					.attr("onerror", "this.src='https://cdn2.iconfinder.com/data/icons/file-format-icons-4/201/Untitled-3-128.png'");
+				$("#images").append($img).append($("<div>").attr("id",aid));
+				$img.on("click", function(e){
+					var that = this;
+					e.preventDefault();
+					console.log("del ", aid);
+					$.ajax({
+						"url": 'https://rdb-simpledb.restdb.io/media/'+aid,
+						"method": 'DELETE'
+					})
+					.done(function(resp){
+						console.log("SUCCESS ",resp);
+						$(that).next().remove();
+						$(that).remove();
+					})
+					.fail(function(error){
+						console.log("FAIL ", error);
+					});
+					
+					return false;
+				});
+			})
+		});
+	}
+	</script>
+</body>
+</html>
