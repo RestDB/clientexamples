@@ -11,17 +11,17 @@ td {
 	border: 1px solid gray;
 }
 .offline {
-	color: gray;
+	color: red !important;
 }
 .online {
-	color: green;
+	color: green !important;
 }
 #messages {
 	/* height: 400px; */
     overflow: auto;
     background-color: #000;
     color: greenyellow;
-    margin-top: 20px;
+    margin-top: 5px;
     font-family: sans-serif;
     font-weight: 100;
     font-size: 16px;
@@ -36,4 +36,15 @@ td {
 .highlight {
     color: green;
     border: 4px solid gray;
+}
+
+pre {
+    font-size: 10px;
+}
+
+.navbar-logo {
+    position: relative;
+    top: -5px;
+    height: 68px;
+    margin-top: -9px;
 }

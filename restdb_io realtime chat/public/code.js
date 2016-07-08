@@ -3,14 +3,24 @@ var hightlight = function(id) {
     setTimeout(function(){
             $(id).removeClass("highlight");
     }, 5000);
-    
+}
+
+function makeid()
+{
+    var text = "";
+    var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+    for( var i=0; i < 5; i++ ){
+        text += possible.charAt(Math.floor(Math.random() * possible.length));
+    }
+    return text;
 }
 
 $( document ).ready(function() {
-    var apikey = "570c0945f2eeca0bca106819";
+    var apikey = "577ed0a645c8ac6e5b035fbe";
+    var myid = makeid();
     var db = null; 
     try {
-        db = new restdb("570c0945f2eeca0bca106819", {realtime: true});
+        db = new restdb(apikey, {realtime: true});
         $("#status").text("Ok, got the api").addClass("online");
         hightlight("#init_block");
     } catch (ex) {
@@ -21,7 +31,7 @@ $( document ).ready(function() {
         if(e.keyCode == 13 && $(this).val() !== '')
         {
             hightlight("#input_block");
-            var payload = {"oneliner": $(this).val()};
+            var payload = {"oneliner": $(this).val(), "userid": myid};
             $(this).val("");
             var newline = new db.chat(payload);
             newline.save();
@@ -30,7 +40,7 @@ $( document ).ready(function() {
     
     db.chat.on('POST', function(err, mess) {
         hightlight("#post_block");
-        var text = $("<div>").text(mess.data.oneliner);
+        var text = $("<div>").text(mess.data.userid + ": " + mess.data.oneliner);
         text.attr("id", mess.data._id);
         text.hide();
         $("#messages").prepend(text);
@@ -62,7 +72,7 @@ $( document ).ready(function() {
         $("#messages").empty();
         db.chat.find({}, {"$max": 100,"$orderby": {"_created": -1}}, function(err, lines){
             _.each(lines, function(aline){
-                var text = $("<div>").text(aline.oneliner);
+                var text = $("<div>").text(aline.userid + ": " + aline.oneliner);
                 text.attr("id", aline._id);
                 $("#messages").append(text);
                 text.dblclick(function() {
@@ -75,11 +85,13 @@ $( document ).ready(function() {
     });
     db.on("DISCONNECT", function() {
         hightlight("#disconnect_block");
-        $("#status").addClass("online").addClass("offline").text("off");
+        $("#status").removeClass("online").addClass("offline").text("offline");
     });
     db.on("RECONNECT", function() {
         hightlight("#reconnect_block");
         $("#status").addClass("online").removeClass("offline").text("Back again");
     });
     
+    
+   
 });

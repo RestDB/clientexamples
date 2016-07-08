@@ -3,15 +3,15 @@
 <html lang="en">
 <head>
     <meta charset="utf-8"/>
-    <title>upload</title>
+    <title>restdb.io | realtime demo</title>
     <script src="https://code.jquery.com/jquery-2.2.3.min.js"   integrity="sha256-a23g1Nt4dtEYOj7bR+vTu7+T8VP13humZFBJNIYoEJo="   crossorigin="anonymous"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.0.0/jquery.min.js"></script>
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.10.0/lodash.js"></script>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
     <!-- restdb.io libraries -->
-    <script src="https://webforms-b553.restdb.local.io/assets/js/eventsource.min.js"></script>
-    <script src="https://webforms-b553.restdb.local.io/rest/_jsapi.js"></script>
+    <script src="https://realtimedemo-7c18.restdb.io/assets/js/eventsource.min.js"></script>
+    <script src="https://realtimedemo-7c18.restdb.io/rest/_jsapi.js"></script>
     
     <link rel="stylesheet" href="public/styles.css">
     <script src="public/code.js"></script>
@@ -19,86 +19,121 @@
 </head>
 <body>
     <div class="container-fluid">
-        <h1>Realtime REST with restdb.io</h1>
+        <nav class="navbar navbar-inverse">
+            <div class="container-fluid">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                </button>
+                <a href="https://restdb.io" class="navbar-brand navbar-logo"><img src="https://restdb.io/media/restdblogo.png" alt="nosql database" title="cloud database" class="navbar-logo"></a>
+            </div>
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav">
+                    <li><a target="docs" href="https://restdb.io/docs/realtime-messaging">Realtime Doc<span class="sr-only">(current)</span></a></li>
+                    <li><a target="jsdocs" href="https://restdb.io/docs/javascript-api">JavaScript API Doc</a></li>
+                    
+                </ul>
+                <ul class="nav navbar-nav navbar-right">
+                    <li><p class="navbar-text" id="status" class="offline">offline</p></li>
+                </ul>
+            </div>
+            
+        </nav>
+        <div class="col-sm-12 well">
+            Realtime improves user experience (UX) and the speed of communication.
+RestDB.io lets your application subscribe to Data Events in realtime.
+This example shows a chat application that visualises REST Data Events (PUT, POST, DELETE) and the executing code block. 
+To get started, <a target="quickstart" href="https://restdb.io/docs/quick-start">create a new database</a>, read the <a target="jsapi" href="https://restdb.io/docs/javascript-api">docs</a> and look at the Github <a target="github" href="https://github.com/RestDB/clientexamples/tree/master/restdb_io%20realtime%20chat">code example</a>.
+<br><br>Send a link to this page to your team/friends, start chatting, and watch the events propagate.
+        </div>
         <div class="col-sm-4">
-            <h2>Chat <small id="status" class="offline">offline</small></h2>
+            <h4>Chat</h4>
             <hr>
             <input type="text" id="oneliner">
+            <small>Double click to delete</small>
             <div id="messages"></div>
         </div>
         <div class="col-sm-8">
-            <h2>The code</h2>
+            <h4>The code</h4>
             <hr>
-            
-            <pre id="init_block"><code class="javascript">  var apikey = &quot;570c0945f2eeca0bca106819&quot;;
-    var db = null; 
-    try {
-        db = new restdb(&quot;570c0945f2eeca0bca106819&quot;, {realtime: true});
-        $(&quot;#status&quot;).text(&quot;Ok, got the api&quot;).addClass(&quot;online&quot;);
-    } catch (ex) {
-        $(&quot;#status&quot;).text(&quot;Error loading jsapi&quot;);
-    }
+
+<pre id="post_block"><code class="javascript">// Called when new records are inserted into the database
+db.chat.on(&#39;POST&#39;, function(err, mess) {
+    var line = $(&quot;&lt;div&gt;&quot;).text(mess.data.oneliner + &quot; &quot; + mess.data._id);
+    line.hide();
+    $(&quot;#messages&quot;).prepend(line);
+    line.toggle(&quot;scale&quot;)
+});
+</code></pre>
+
+<pre id="put_block"><code class="javascript">// Called when a record is changed in the database
+db.chat.on(&#39;PUT&#39;, function(err, mess) {
+    db.chat.find({&quot;_id&quot;: mess.data}, {}, function(err, updatedline){
+        $(&quot;#&quot;+mess.data).text(updatedline[0].oneliner);
+    });
+});
+</code></pre>
+
+<pre id="delete_block"><code class="javascript">// Called when one or more record is deleted in the database
+db.chat.on(&#39;DELETE&#39;, function(err, mess) {
+    _.each(mess.data, function(oneid){
+        $(&quot;#&quot;+oneid).remove();    
+    });
+});
+</code></pre>
+<pre id="init_block"><code class="javascript">// The initial setup and connection the a realtime database
+var apikey = &quot;577ed0a645c8ac6e5b035fbe&quot;;
+var db = null; 
+try {
+    db = new restdb(apikey, {realtime: true});
+    $(&quot;#status&quot;).text(&quot;Ok, got the api&quot;).addClass(&quot;online&quot;);
+} catch (ex) {
+    $(&quot;#status&quot;).text(&quot;Error loading jsapi&quot;);
+}
 </code></pre>
     
-<pre id="input_block"><code class="javascript"> $(&quot;#oneliner&quot;).keyup(function(e){
-        if(e.keyCode == 13)
-        {
-            var payload = {&quot;oneliner&quot;: $(this).val()};
-            $(this).val(&quot;&quot;);
-            var newline = new db.chat(payload);
-            newline.save();
-        }
-    });
+<pre id="input_block"><code class="javascript">// Called when a user types something in the input field
+$(&quot;#oneliner&quot;).keyup(function(e){
+    if(e.keyCode == 13)
+    {
+        var payload = {&quot;oneliner&quot;: $(this).val()};
+        $(this).val(&quot;&quot;);
+        var newline = new db.chat(payload);
+        newline.save();
+    }
+});
 </code></pre>
 
-<pre id="post_block"><code class="javascript">  db.chat.on(&#39;POST&#39;, function(err, mess) {
-        console.log(&quot;Realtime message: &quot;, mess);
-        var line = $(&quot;&lt;div&gt;&quot;).text(mess.data.oneliner + &quot; &quot; + mess.data._id);
-        line.hide();
-        $(&quot;#messages&quot;).prepend(line);
-        line.toggle(&quot;scale&quot;)
-    });
-</code></pre>
-
-<pre id="put_block"><code class="javascript">  db.chat.on(&#39;PUT&#39;, function(err, mess) {
-        db.chat.find({&quot;_id&quot;: mess.data}, {}, function(err, updatedline){
-            $(&quot;#&quot;+mess.data).text(updatedline[0].oneliner);
+<pre id="connect_block"><code class="javascript">// Called when a connection is established
+db.on(&quot;CONNECT&quot;, function() {
+    $(&quot;#status&quot;).addClass(&quot;online&quot;).removeClass(&quot;offline&quot;).text(&quot;online&quot;);
+    $(&quot;#messages&quot;).empty();
+    db.chat.find({}, {&quot;$max&quot;: 100,&quot;$orderby&quot;: {&quot;_created&quot;: -1}}, function(err, lines){
+        _.each(lines, function(aline){
+            $(&quot;#messages&quot;).append($(&quot;&lt;div&gt;&quot;).text(aline.oneliner));        
         });
-    });
+    })
+});
 </code></pre>
 
-<pre id="delete_block"><code class="javascript">    // double click on text to delete
-    db.chat.on(&#39;DELETE&#39;, function(err, mess) {
-        _.each(mess.data, function(oneid){
-            $(&quot;#&quot;+oneid).remove();    
-        });
-    });
+<pre id="disconnect_block"><code class="javascript">//Called when the connection is lost, unplug your wifi to see this
+db.on(&quot;DISCONNECT&quot;, function() {
+    console.log(&quot;Realtime closed: &quot;);
+    $(&quot;#status&quot;).addClass(&quot;online&quot;).addClass(&quot;offline&quot;).text(&quot;off&quot;);
+});
 </code></pre>
 
-<pre id="connect_block"><code class="javascript">   db.on(&quot;CONNECT&quot;, function() {
-        console.log(&quot;Realtime open: &quot;);
-        $(&quot;#status&quot;).addClass(&quot;online&quot;).removeClass(&quot;offline&quot;).text(&quot;online&quot;);
-        $(&quot;#messages&quot;).empty();
-        db.chat.find({}, {&quot;$max&quot;: 100,&quot;$orderby&quot;: {&quot;_created&quot;: -1}}, function(err, lines){
-            _.each(lines, function(aline){
-                $(&quot;#messages&quot;).append($(&quot;&lt;div&gt;&quot;).text(aline.oneliner));        
-            });
-        })
-    });
+<pre id="recconnect_block"><code class="javascript">// Called after a lost connection is regained
+db.on(&quot;RECONNECT&quot;, function() {
+    $(&quot;#status&quot;).addClass(&quot;online&quot;).removeClass(&quot;offline&quot;).text(&quot;Back again&quot;);
+});
 </code></pre>
-
-<pre id="disconnect_block"><code class="javascript">    db.on(&quot;DISCONNECT&quot;, function() {
-        console.log(&quot;Realtime closed: &quot;);
-        $(&quot;#status&quot;).addClass(&quot;online&quot;).addClass(&quot;offline&quot;).text(&quot;off&quot;);
-    });
-</code></pre>
-
-<pre id="recconnect_block"><code class="javascript">    db.on(&quot;RECONNECT&quot;, function() {
-        $(&quot;#status&quot;).addClass(&quot;online&quot;).removeClass(&quot;offline&quot;).text(&quot;Back again&quot;);
-    });
-</code></pre>
-        </div>
-        
     </div>
+        
+</div>
 </body>
 </html>
