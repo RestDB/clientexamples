@@ -2,293 +2,293 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-    <meta name="description" content="">
-    <meta name="author" content="">
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+  <meta name="description" content="">
+  <meta name="author" content="">
 
-    <title>My SPA demo</title>
+  <title>My SPA demo</title>
 
-    <!-- Bootstrap core CSS -->
-    <link href="//cdnjs.cloudflare.com/ajax/libs/bootswatch/3.3.6/cosmo/bootstrap.min.css" rel="stylesheet">
-    
-    <!-- Font Awesome -->
-    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
+  <!-- Bootstrap core CSS -->
+  <link href="//cdnjs.cloudflare.com/ajax/libs/bootswatch/3.3.6/cosmo/bootstrap.min.css" rel="stylesheet">
+  
+  <!-- Font Awesome -->
+  <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
 
-    <!-- JQuery -->
-    <script src="https://code.jquery.com/jquery-3.1.0.min.js"   integrity="sha256-cCueBR6CsyA4/9szpPfrX3s49M9vUU5BgtiJj06wt/s="   crossorigin="anonymous"></script>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/jqueryui/1.10.4/jquery-ui.min.js" type="text/javascript"></script>
+  <!-- JQuery -->
+  <script src="https://code.jquery.com/jquery-3.1.0.min.js"   integrity="sha256-cCueBR6CsyA4/9szpPfrX3s49M9vUU5BgtiJj06wt/s="   crossorigin="anonymous"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/jqueryui/1.10.4/jquery-ui.min.js" type="text/javascript"></script>
 
-    <!-- Lodash -->
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.15.0/lodash.min.js"></script>
-    
-    <!-- Auth0 lock script -->
-    <script src="//cdn.auth0.com/js/lock/10.1.0/lock.min.js"></script>
-    
-    <!-- css for our app -->
-    <link href="{{root}}/styles.css" rel="stylesheet">
-    
+  <!-- Lodash -->
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.15.0/lodash.min.js"></script>
+  
+  <!-- Auth0 lock script -->
+  <script src="//cdn.auth0.com/js/lock/10.1.0/lock.min.js"></script>
+  
+  <!-- css for our app -->
+  <link href="{{root}}/styles.css" rel="stylesheet">
+  
   </head>
 
   <body>
-    <div class="container">
-        <div class="col-md-8">
-        <h1>My ToDo SPA app</h1> 
-        <p class="lead">Welcome <span class="nickname"></span></p>
-        <img width="100px" alt="avatar" class="avatar" style="display:none;">
-        <button type="submit" class="btn btn-default btn-login">Sign In</button>
-        <button type="submit" class="btn btn-default btn-logout" style="display:none;">Sign Out</button>
-        <hr>
-        <div class="row">
-            <div class="col-md-6">
-                <div class="todolist not-done">
-                 <h1>Todos</h1>
-                    <input type="text" class="form-control add-todo" placeholder="Add todo">
-                        <hr>
-                        <ul id="sortable" class="list-unstyled">
-                            <!-- items from database here -->
-                        </ul>
-                    <div class="todo-footer">
-                        <strong><span class="count-todos"></span></strong> Items Left
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-6">
-                <div class="todolist">
-                 <h1>Already Done</h1>
-                    <ul id="done-items" class="list-unstyled">
-                        <!-- items from database here -->
-                    </ul>
-                </div>
-            </div>
+  <div class="container">
+    <div class="col-md-8">
+    <h1>My ToDo SPA app</h1> 
+    <p class="lead">Welcome <span class="nickname"></span></p>
+    <img width="100px" alt="avatar" class="avatar" style="display:none;">
+    <button type="submit" class="btn btn-default btn-login">Sign In</button>
+    <button type="submit" class="btn btn-default btn-logout" style="display:none;">Sign Out</button>
+    <hr>
+    <div class="row">
+      <div class="col-md-6">
+        <div class="todolist not-done">
+         <h1>Todos</h1>
+          <input type="text" class="form-control add-todo" placeholder="Add todo">
+            <hr>
+            <ul id="sortable" class="list-unstyled">
+              <!-- items from database here -->
+            </ul>
+          <div class="todo-footer">
+            <strong><span class="count-todos"></span></strong> Items Left
+          </div>
         </div>
-        
+      </div>
+      <div class="col-md-6">
+        <div class="todolist">
+         <h1>Already Done</h1>
+          <ul id="done-items" class="list-unstyled">
+            <!-- items from database here -->
+          </ul>
+        </div>
+      </div>
     </div>
-    <script>
     
-    $(function(){
-        /*
-        * Authentication code
-        */
-        const AUTH0_CLIENT_ID = "DaIj3UPFDF2yGxBYwfwDV1VTfxN5p20p";
-        const AUTH0_DOMAIN = "knutmt.eu.auth0.com";
+  </div>
+  <script>
+  
+  $(function(){
+    /*
+    * Authentication code
+    */
+    const AUTH0_CLIENT_ID = "DaIj3UPFDF2yGxBYwfwDV1VTfxN5p20p";
+    const AUTH0_DOMAIN = "knutmt.eu.auth0.com";
+    
+    var lock = new Auth0Lock(AUTH0_CLIENT_ID, AUTH0_DOMAIN, {
+      auth: {
+      params: { scope: 'openid email' } //Details: https://auth0.com/docs/scopes
+      }
+    });
+    
+    // auto login
+    if (localStorage.getItem('id_token')) {
+      var token = localStorage.getItem('id_token');
+      lock.getProfile(token, function(error, profile) {
+        if (error) {
+          // Handle error
+          return;
+        }
         
-        var lock = new Auth0Lock(AUTH0_CLIENT_ID, AUTH0_DOMAIN, {
-            auth: {
-            params: { scope: 'openid email' } //Details: https://auth0.com/docs/scopes
+        // Display user information
+        show_profile_info(profile);
+        
+        // global ajax Authorization setup
+        $.ajaxPrefilter(function( options ) {
+          if ( !options.beforeSend) {
+            options.beforeSend = function (xhr) { 
+              xhr.setRequestHeader('Authorization', 'Bearer ' + localStorage.getItem('id_token'));
             }
+          }
         });
         
-        // auto login
-        if (localStorage.getItem('id_token')) {
-            var token = localStorage.getItem('id_token');
-            lock.getProfile(token, function(error, profile) {
-                if (error) {
-                    // Handle error
-                    return;
-                }
-                
-                // Display user information
-                show_profile_info(profile);
-                
-                // global ajax Authorization setup
-                $.ajaxPrefilter(function( options ) {
-    				if ( !options.beforeSend) {
-    					options.beforeSend = function (xhr) { 
-    						xhr.setRequestHeader('Authorization', 'Bearer ' + localStorage.getItem('id_token'));
-    					}
-    				}
-    			});
-                
-                // get task items from database
-                getItems();
-            });
-        }
-        var show_profile_info = function(profile) {
-            $('.nickname').text(profile.nickname);
-            $('.btn-login').hide();
-            $('.avatar').attr('src', profile.picture).show();
-            $('.btn-logout').show();
-         };
+        // get task items from database
+        getItems();
+      });
+    }
+    var show_profile_info = function(profile) {
+      $('.nickname').text(profile.nickname);
+      $('.btn-login').hide();
+      $('.avatar').attr('src', profile.picture).show();
+      $('.btn-logout').show();
+     };
 
-        var retrieve_profile = function() {
-            var id_token = localStorage.getItem('id_token');
-            if (id_token) {
-              lock.getProfile(id_token, function (err, profile) {
-                if (err) {
-                  return alert('There was an error getting the profile: ' + err.message);
-                }
-                // Display user information
-                show_profile_info(profile);
-                // enable api button
-                $('.btn-api').removeAttr("disabled");
-              });
+    var retrieve_profile = function() {
+      var id_token = localStorage.getItem('id_token');
+      if (id_token) {
+        lock.getProfile(id_token, function (err, profile) {
+        if (err) {
+          return alert('There was an error getting the profile: ' + err.message);
+        }
+        // Display user information
+        show_profile_info(profile);
+        // enable api button
+        $('.btn-api').removeAttr("disabled");
+        });
+      }
+    };
+    
+    $('.btn-login').click(function(e) {
+      e.preventDefault();
+      lock.show();
+      return false;
+    });
+    
+    $('.btn-logout').click(function(e) {
+       localStorage.removeItem('id_token');
+       $('.btn-api').attr("disabled", "true");
+       window.location.href = "/public/index";
+       e.preventDefault();
+       return false;
+    });
+    
+    lock.on("authenticated", function(authResult) {
+      lock.getProfile(authResult.idToken, function(error, profile) {
+        if (error) {
+          // Handle error
+          return;
+        }
+        localStorage.setItem('id_token', authResult.idToken);
+        
+        // Display user information
+        show_profile_info(profile);
+         
+        // global ajax Authorization setup
+        $.ajaxPrefilter(function( options ) {
+          if ( !options.beforeSend) {
+            options.beforeSend = function (xhr) { 
+              xhr.setRequestHeader('Authorization', 'Bearer ' + localStorage.getItem('id_token'));
             }
-        };
-        
-        $('.btn-login').click(function(e) {
-            e.preventDefault();
-            lock.show();
-            return false;
+          }
         });
         
-        $('.btn-logout').click(function(e) {
-           localStorage.removeItem('id_token');
-           $('.btn-api').attr("disabled", "true");
-           window.location.href = "/public/index";
-           e.preventDefault();
-           return false;
+        // get task items from database
+        getItems();
+      });
+    });
+    
+    
+    /*
+    * Application code
+    */
+    $("#sortable").sortable();
+    $("#sortable").disableSelection();
+    
+    // all done btn
+    $("#checkAll").click(function(){
+      AllDone();
+    });
+    
+     // get tasks from database
+    function getItems(){
+      $.getJSON('https://myapp-7175.restdb.io/rest/items', function(data){
+        var taskhtml = [];
+        _.each(data, function(item){
+          taskhtml = [
+            '<li id="'+item._id+'" class="ui-state-default">',
+              '<div class="checkbox">',
+                '<label><input type="checkbox" value="" />'+item.title+'</label>',
+              '</div>',
+            '</li>'
+          ].join('');
+          if (item.done === false) {
+            $("#sortable").append(taskhtml);
+          } else {
+            $("#done-items").append('<li id="'+item._id+'">'+item.title+' <button class="remove-item btn btn-default btn-xs pull-right"><span class="glyphicon glyphicon-remove"></span></button></li>');
+          }
+          countTodos();
         });
         
-        lock.on("authenticated", function(authResult) {
-            lock.getProfile(authResult.idToken, function(error, profile) {
-                if (error) {
-                    // Handle error
-                    return;
-                }
-                localStorage.setItem('id_token', authResult.idToken);
-                
-                // Display user information
-                show_profile_info(profile);
-               
-                // global ajax Authorization setup
-                $.ajaxPrefilter(function( options ) {
-    				if ( !options.beforeSend) {
-    					options.beforeSend = function (xhr) { 
-    						xhr.setRequestHeader('Authorization', 'Bearer ' + localStorage.getItem('id_token'));
-    					}
-    				}
-    			});
-                
-                // get task items from database
-                getItems();
-            });
-        });
-        
-        
-        /*
-        * Application code
-        */
-        $("#sortable").sortable();
-        $("#sortable").disableSelection();
-        
-        // all done btn
-        $("#checkAll").click(function(){
-            AllDone();
-        });
-        
-         // get tasks from database
-        function getItems(){
-            $.getJSON('https://myapp-7175.restdb.io/rest/items', function(data){
-                var taskhtml = [];
-                _.each(data, function(item){
-                    taskhtml = [
-                        '<li id="'+item._id+'" class="ui-state-default">',
-                            '<div class="checkbox">',
-                                '<label><input type="checkbox" value="" />'+item.title+'</label>',
-                            '</div>',
-                        '</li>'
-                    ].join('');
-                    if (item.done === false) {
-                        $("#sortable").append(taskhtml);
-                    } else {
-                        $("#done-items").append('<li id="'+item._id+'">'+item.title+' <button class="remove-item btn btn-default btn-xs pull-right"><span class="glyphicon glyphicon-remove"></span></button></li>');
-                    }
-                    countTodos();
-                });
-              
-            });
-        }
-        //create todo
-        $('.add-todo').on('keypress',function (e) {
-              e.preventDefault
-              if (e.which == 13) {
-                   if($(this).val() != ''){
-                   var todo = $(this).val();
-                    createTodo(todo); 
-                    countTodos();
-                   }else{
-                       // some validation
-                   }
-              }
-        });
-        // mark task as done
-        $('.todolist').on('change','#sortable li input[type="checkbox"]',function(){
-            if($(this).prop('checked')){
-                var doneItem = $(this).parent().parent().find('label').text();
-                
-                $(this).parent().parent().parent().addClass('remove');
-                // set as done in database
-                var jsondata = {"title": doneItem, "done": true};
-                var ID = $(this).parent().parent().parent().attr("id");
-                $.ajax({
-    				type: "PUT",
-    				url: 'https://myapp-7175.restdb.io/rest/items/'+ID,
-    				contentType: "application/json",
-				    data: JSON.stringify(jsondata)
-    			}).done(function(result) {
-                    done(doneItem, ID);
-                    countTodos();	
-    			});
-                
-            }
-        });
-        
-        //delete done task from "already done"
-        $('.todolist').on('click','.remove-item',function(){
-            var elementToRemove = this;
-            var ID = $(elementToRemove).parent().attr("id");    
-            $.ajax({
-				type: "DELETE",
-				url: 'https://myapp-7175.restdb.io/rest/items/'+ID,
-				contentType: "application/json"
-			}).done(function(result) {
-                removeItem(elementToRemove);
-			});
-            
-        });
-        
-        // count tasks
-        function countTodos(){
-            var count = $("#sortable li").length;
-            $('.count-todos').html(count);
-        }
-        
-        //create task
-        function createTodo(text){
-            var jsondata = {"title": text, "done": false};
-			$.ajax({
-				type: "POST",
-				url: 'https://myapp-7175.restdb.io/rest/items',
-				contentType: "application/json",
-				data: JSON.stringify(jsondata)
-			}).done(function(result) {
-				// add to list
-    			var markup = $('<li id="'+result._id+'" class="ui-state-default"><div class="checkbox"><label><input type="checkbox" value="" />'+ result.title +'</label></div></li>');
-                $('#sortable').append(markup);
-                $('.add-todo').val('');
-			});
-            
-        }
-        
-        //mark task as done
-        function done(doneItem, ID){
-            var done = doneItem;
-            var markup = '<li id="'+ID+'">'+ done +'<button class="btn btn-default btn-xs pull-right  remove-item"><span class="glyphicon glyphicon-remove"></span></button></li>';
-            $('#done-items').append(markup);
-            $('.remove').remove();
-        }
-        
-        
-        //remove done task from list
-        function removeItem(element){
-            $(element).parent().remove();
+      });
+    }
+    //create todo
+    $('.add-todo').on('keypress',function (e) {
+        e.preventDefault
+        if (e.which == 13) {
+           if($(this).val() != ''){
+           var todo = $(this).val();
+          createTodo(todo); 
+          countTodos();
+           }else{
+             // some validation
+           }
         }
     });
-       
-    </script>
+    // mark task as done
+    $('.todolist').on('change','#sortable li input[type="checkbox"]',function(){
+      if($(this).prop('checked')){
+        var doneItem = $(this).parent().parent().find('label').text();
+        
+        $(this).parent().parent().parent().addClass('remove');
+        // set as done in database
+        var jsondata = {"title": doneItem, "done": true};
+        var ID = $(this).parent().parent().parent().attr("id");
+        $.ajax({
+          type: "PUT",
+          url: 'https://myapp-7175.restdb.io/rest/items/'+ID,
+          contentType: "application/json",
+          data: JSON.stringify(jsondata)
+        }).done(function(result) {
+          done(doneItem, ID);
+          countTodos(); 
+        });
+        
+      }
+    });
+    
+    //delete done task from "already done"
+    $('.todolist').on('click','.remove-item',function(){
+      var elementToRemove = this;
+      var ID = $(elementToRemove).parent().attr("id");    
+      $.ajax({
+        type: "DELETE",
+        url: 'https://myapp-7175.restdb.io/rest/items/'+ID,
+        contentType: "application/json"
+      }).done(function(result) {
+        removeItem(elementToRemove);
+      });
+      
+    });
+    
+    // count tasks
+    function countTodos(){
+      var count = $("#sortable li").length;
+      $('.count-todos').html(count);
+    }
+    
+    //create task
+    function createTodo(text){
+      var jsondata = {"title": text, "done": false};
+      $.ajax({
+        type: "POST",
+        url: 'https://myapp-7175.restdb.io/rest/items',
+        contentType: "application/json",
+        data: JSON.stringify(jsondata)
+      }).done(function(result) {
+        // add to list
+        var markup = $('<li id="'+result._id+'" class="ui-state-default"><div class="checkbox"><label><input type="checkbox" value="" />'+ result.title +'</label></div></li>');
+        $('#sortable').append(markup);
+        $('.add-todo').val('');
+      });
+      
+    }
+    
+    //mark task as done
+    function done(doneItem, ID){
+      var done = doneItem;
+      var markup = '<li id="'+ID+'">'+ done +'<button class="btn btn-default btn-xs pull-right  remove-item"><span class="glyphicon glyphicon-remove"></span></button></li>';
+      $('#done-items').append(markup);
+      $('.remove').remove();
+    }
+    
+    
+    //remove done task from list
+    function removeItem(element){
+      $(element).parent().remove();
+    }
+  });
+     
+  </script>
   </body>
 </html>
 
