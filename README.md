@@ -1,6 +1,7 @@
 # RestDB.io client examples
 Boilerplate code snippets for calling restdb.io REST APIs for popular programming languages and frameworks.
 
+- Auth0 SPA demo external user authentication
 - PHP client code
 - Python client code
 - Javascript, jQuery minimal HTML page
