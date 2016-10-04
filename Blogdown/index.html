@@ -2,7 +2,11 @@
 {
     "posts": {
         "collection": "blogposts",
-        "query": {"published": true},
+        {{#if request.query.searchterm}}
+            "query": {"published": true,"_tags": {"$regex": "{{request.query.searchterm}}"}},
+        {{else}}
+            "query": {"published": true},
+        {{/if}}
         "hint": {"$orderby": {"publishdate": -1}}
     },
     "category": {
@@ -18,7 +22,7 @@
     {{#each posts}}
         <h2>{{title}}</h2>
         <p class="lead">
-            by <a href="#">{{author.0.name}}</a>
+            <img class="profileimg" src="/media/{{author.0.photo}}" height="22px"> <a href="#">{{author.0.name}}</a>
         </p>
         <p><span class="glyphicon glyphicon-time"></span> Posted on {{moment publishdate format="LLL"}}, 
         
@@ -33,4 +37,5 @@
         <hr class="blogsep">
     {{/each}}
 {{/block}}
+
 {{/inherit}}

@@ -13,7 +13,7 @@
 
     <!-- Bootstrap Core CSS -->
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-
+    <link href="{{root}}/css/prism.css" rel="stylesheet" />
     <!-- Custom CSS -->
     <link href="{{root}}/css/blog.css" rel="stylesheet">
 
@@ -79,15 +79,15 @@
                 <!-- Blog Search Well -->
                 <div class="well">
                     <h4>Blog Search</h4>
-                    <div class="input-group">
-                        <input type="text" class="form-control">
-                        <span class="input-group-btn">
-                            <button class="btn btn-default" type="button">
-                                <span class="glyphicon glyphicon-search"></span>
-                        </button>
-                        </span>
-                    </div>
-                    <!-- /.input-group -->
+                    
+                <div class="input-group">
+                    <form id="blogsearch-form" method="GET">
+                        <div class="input-group">
+                            <input name="searchterm" type="text" class="form-control" value="{{params.searchterm}}"/><span class="input-group-btn">
+                            <button type="submit" class="btn btn-default"><span class="glyphicon glyphicon-search"></span></button></span>
+                        </div>
+                    </form>
+                </div>
                 </div>
 
                 <!-- Blog Categories Well -->
@@ -109,10 +109,9 @@
 
                 <!-- Side Widget Well -->
                 <div class="well">
-                    <h4>Why blogging</h4>
-                    <p>Your blog gives you the opportunity to create relevant content for your customers. 
-                    Use this as a marketing tactic to drive traffic back to your website. 
-                    Make the blog on your website the foundation for all of your social media platforms. 
+                    <h4>About Markdown</h4>
+                    <p>
+                        Markdown is a text-to-HTML conversion tool for web writers. Markdown allows you to write using an easy-to-read, easy-to-write plain text format, then convert it to structurally valid XHTML (or HTML).
                     </p>
                 </div>
 
@@ -141,6 +140,8 @@
 
     <!-- Bootstrap Core JavaScript -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+    <!-- Prism code highlighter -->
+    <script src="{{root}}/js/prism.js"></script>
 
 </body>
 

@@ -16,4 +16,13 @@ footer {
     height: 7px;
     background: #efefef;
     margin-bottom: 40px;
+    margin-top: 40px;
+}
+
+table {
+    width: 100%;
+}
+td, th{
+    border: 1px solid lightgrey;
+    padding: 4px;
 }
