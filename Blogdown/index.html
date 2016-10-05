@@ -3,7 +3,7 @@
     "posts": {
         "collection": "blogposts",
         {{#if request.query.searchterm}}
-            "query": {"published": true,"_tags": {"$regex": "{{request.query.searchterm}}"}},
+            "query": {"published": true,"_tags": {"$regex": "{{_ "replace" request.query.searchterm " " "|"}}"}},
         {{else}}
             "query": {"published": true},
         {{/if}}
@@ -15,14 +15,12 @@
     }
 }
 {{/context}}
-
 {{#inherit 'masterpage'}}
-
 {{#block 'blogposts'}}
     {{#each posts}}
         <h2>{{title}}</h2>
         <p class="lead">
-            <img class="profileimg" src="/media/{{author.0.photo}}" height="22px"> <a href="#">{{author.0.name}}</a>
+            <img class="profileimg" src="/media/{{author.0.photo}}"> <a href="#">{{author.0.name}}</a>
         </p>
         <p><span class="glyphicon glyphicon-time"></span> Posted on {{moment publishdate format="LLL"}}, 
         
@@ -30,12 +28,9 @@
             <span class="label label-default">{{name}}</span>
         {{/each}}
         </p>
-         <!-- Preview Image -->
         <hr>
-         <!-- Post Content -->
         <p class="lead">{{{markdown content}}}</p>
         <hr class="blogsep">
     {{/each}}
 {{/block}}
-
 {{/inherit}}
