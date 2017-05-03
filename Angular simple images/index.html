@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en" ng-app="hImages">
+	<head>
+		<meta charset="utf-8">		
+		<title>Simple image + caption upload and CRUD using AngularJS and restdb.io</title>
+		<script type="text/javascript" src="angular.min.js"></script>
+		<script type="text/javascript" src="app.js"></script>
+	</head>
+	<body ng-controller="hImagesController">
+		<p>
+			<label for="hImageName">Caption</label><br />
+			<input type="text" ng-model="hImageName" name="hImageName" id="hImageName" /><br />
+			<label for="hImage">Image</label><br />
+			<input type="file" ng-model="hImage" name="hImage" id="hImage" />
+		</p>
+		<p>
+			<button id="uploadButton" type="button" ng-click="new()">Upload</button>
+		</p>
+		<p>
+			<label for="filter">Filter</label><br />
+			<input type="text" ng-model="search.Name" name="filter" id="filter" />
+		</p>
+		<table>
+			<tr ng-repeat="hImage in hImages | filter:search">
+				<td>
+					<img ng-repeat="image in hImage.Image" ng-src="{{image.thumb}}" alt="{{hImage.Name}}"/>
+				</td>
+				<td>
+					<label for="hImageName-{{hImage._id}}">Caption</label>
+					<input value="{{hImage.Name}}" id="hImageName-{{hImage._id}}" ng-model="hImage.Name" />
+					<button id="renameButton" type="button" ng-click="rename(hImage._id, hImage.Name)">Save</button>
+					<button id="deleteButton" type="button" ng-click="delete(hImage)">Delete image</button>
+				</td>				
+			</tr>
+		</ul>
+	</body>
+</html>

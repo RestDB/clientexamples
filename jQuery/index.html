@@ -4,7 +4,7 @@
 	<meta charset="utf-8">
 	<meta name="description" content="Minimal HTML5 Document Showing How to use RestDB API and jQuery">
 	<title>RestDB jQuery example</title>
-	<script src="http://code.jquery.com/jquery-latest.js"></script>
+	<script src="https://code.jquery.com/jquery-latest.js"></script>
 </head>
 <body>
 	<h1>RestDB jQuery boiler plate code</h1>
@@ -17,7 +17,7 @@
 			*/
 			$.ajaxPrefilter(function( options ) {
 				if ( !options.beforeSend) {
-					options.beforeSend = function (xhr) { 
+					options.beforeSend = function (xhr) {
 						xhr.setRequestHeader('x-apikey', '569a2b87566759cf4b984a50');
 					}
 				}
@@ -36,7 +36,7 @@
 				}
 				element.append($('<br><input type="text">'));
 				element.append($('<input type="button" value="send">').attr('id', item._id).on('click', itemClicked));
-				return element;	
+				return element;
 			}
 
 			/*
@@ -69,6 +69,6 @@
 			});
 		});
 	</script>
- 
+
 	</body>
 </html>
