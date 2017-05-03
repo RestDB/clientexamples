@@ -18,7 +18,7 @@ hImages.constant("config", {
     collectionName: /* Enter your collection name here. Eg. "images" */
 });
 ```
-**important**: Create a valid [CORS API key](https://restdb.io/docs/apikeys-and-cors#restdb), use * as Access-Control-Allow-Origin for running from a local machine.
+**important**: Create a valid [CORS API key](https://restdb.io/docs/apikeys-and-cors#restdb), use `* as Access-Control-Allow-Origin for running from a local machine.
 
 Open index.html and run the App.
 
