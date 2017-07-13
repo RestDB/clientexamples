@@ -1,0 +1,25 @@
+body {
+    margin: 0;
+    padding: 0;
+    font-family: sans-serif;
+}
+
+.tickers {
+    display: inline-block;
+}
+
+.table {
+    text-align: left;
+}
+
+.num {
+    text-align: right;
+}
+
+.up {
+    background: green;
+}
+
+.down {
+    background: red;
+}

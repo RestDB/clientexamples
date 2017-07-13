@@ -1,0 +1,20 @@
+{
+    "name": "realtime-react",
+    "version": "0.1.0",
+    "private": true,
+    "homepage": ".",
+    "dependencies": {
+        "axios": "^0.16.2",
+        "lodash": "^4.17.4",
+        "react": "^15.6.1",
+        "react-dom": "^15.6.1",
+        "react-scripts": "1.0.10"
+    },
+    "scripts": {
+        "start": "react-scripts start",
+        "build": "react-scripts build",
+        "test": "react-scripts test --env=jsdom",
+        "eject": "react-scripts eject",
+        "deploy": "restdb-cli --cmd upload --src ./build --dest /reactrealtime --database reactrealtime-6683 --apikey c500cef6b35c5e0260a05d73943dc48e961eb"
+    }
+}
