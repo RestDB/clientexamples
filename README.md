@@ -14,4 +14,4 @@ Boilerplate code snippets for calling restdb.io REST APIs for popular programmin
 
 Go to website https://restdb.io
 
-![RestDB Logo](/images/restdbio.png)
+![RestDB Logo](/images/restdb-banner.png)
