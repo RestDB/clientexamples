@@ -5,7 +5,7 @@ import axios from 'axios';
 const apikey = '595f6501afce09e87211ea68';
 
 // Autotrade delay
-const trade_delay = 10000; // millis
+const trade_delay = 5000; // millis
 
 // REST endpoint
 let restdb = axios.create({
