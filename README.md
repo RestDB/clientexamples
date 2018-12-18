@@ -5,6 +5,7 @@ Boilerplate code snippets for calling restdb.io REST APIs for popular programmin
 - Auth0 SPA demo external user authentication
 - PHP client code
 - Python client code
+- Python image upload
 - Javascript, jQuery minimal HTML page
 - Highcharts bar chart HTML page
 - Dashboard example charts with Chartist and JustGage
