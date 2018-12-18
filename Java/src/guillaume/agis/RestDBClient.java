@@ -15,7 +15,7 @@ public final class RestDBClient {
     // You can find your API KEYS here : https://restdb.io/docs/apikeys-and-cors
     private final String BASE_URI = "https://rdb-examples.restdb.io/rest/"; // change to your BASE URI
     private final String API_KEY = "58aef41e2c4ed27f0da9dd05a1720d6698be3"; // change to your API KEY
-    private final String CONTENT_TYPE = "Content-Type: application/json";
+    private final String CONTENT_TYPE = "application/json";
     private final int TIMEOUT = 2000;// 2000ms = 2seconds
 
     //HTTP protocol
