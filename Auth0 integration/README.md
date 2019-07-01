@@ -4,7 +4,7 @@ ToDo Web app with user authentication integrated with Auth.com
 
 View live demo here (as a public HTML Page in the database): 
 
-https://myapp-7175.restdb.io/public/index
+https://www-myapp-7175.restdb.io
 
 Read blog post here:
 
